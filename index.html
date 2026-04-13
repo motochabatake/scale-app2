@@ -16,43 +16,47 @@ body {
 }
 
 h1 {
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 15px;
 }
 
+/* タブ */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.tab {
+  flex: 0 0 auto;
+  padding: 10px 15px;
+  border-radius: 20px;
+  background: #333;
+  font-size: 16px;
+}
+
+.tab.active {
+  background: #fff;
+  color: #000;
+}
+
+/* 入力 */
 input {
   width: 100%;
-  font-size: 28px;
-  padding: 15px;
+  font-size: 26px;
+  padding: 14px;
   border-radius: 12px;
   border: none;
   margin-bottom: 15px;
   text-align: center;
 }
 
+/* 結果 */
 .result {
   font-size: 42px;
   font-weight: bold;
   margin: 25px 0;
-}
-
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-button {
-  font-size: 20px;
-  padding: 15px;
-  border-radius: 12px;
-  border: none;
-  background: #333;
-  color: white;
-}
-
-button:active {
-  background: #666;
 }
 </style>
 </head>
@@ -60,6 +64,15 @@ button:active {
 <body>
 
 <h1>縮小率計算</h1>
+
+<div class="tabs">
+  <div class="tab" onclick="selectTab(200, this)">200%</div>
+  <div class="tab" onclick="selectTab(150, this)">150%</div>
+  <div class="tab" onclick="selectTab(133.33, this)">133%</div>
+  <div class="tab" onclick="selectTab(120, this)">120%</div>
+  <div class="tab" onclick="selectTab(110, this)">110%</div>
+  <div class="tab" onclick="selectTab(100, this)">100%</div>
+</div>
 
 <input 
   type="number" 
@@ -70,15 +83,6 @@ button:active {
 />
 
 <div class="result" id="result">-- %</div>
-
-<div class="buttons">
-  <button onclick="setVal(200)">200%</button>
-  <button onclick="setVal(150)">150%</button>
-  <button onclick="setVal(133.33)">133%</button>
-  <button onclick="setVal(120)">120%</button>
-  <button onclick="setVal(110)">110%</button>
-  <button onclick="setVal(100)">100%</button>
-</div>
 
 <script>
 function calc() {
@@ -91,12 +95,19 @@ function calc() {
   }
 
   const reduction = 100 / val;
-  result.innerText = reduction.toFixed(2) + " %";
+
+  result.innerText = reduction
+    .toFixed(2)
+    .replace(/\.00$/, "") + " %";
 }
 
-function setVal(v) {
-  document.getElementById("input").value = v;
+function selectTab(value, el) {
+  document.getElementById("input").value = value;
   calc();
+
+  // active切り替え
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
 }
 </script>
 
